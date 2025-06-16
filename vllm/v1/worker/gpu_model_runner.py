@@ -1290,11 +1290,7 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             self.maybe_setup_kv_connector(scheduler_output)
 
             print(f"Running the decoder with {num_input_tokens} tokens "
-                  f"and {len(self.input_batch.req_ids)} requests "
-                  f"on {self.vllm_config.parallel_config.device} "
-                  f"with {self.vllm_config.parallel_config.tensor_parallel_size} "
-                  f"TP ranks and {self.vllm_config.parallel_config.data_parallel_size} "
-                  f"DP ranks.")
+                  f"and {len(self.input_batch.req_ids)} requests.")
             model_output = self.model(
                 input_ids=input_ids,
                 positions=positions,
