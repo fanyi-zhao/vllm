@@ -480,6 +480,7 @@ class LLM:
             # Use default sampling params.
             sampling_params = self.get_default_sampling_params()
 
+        # Tokenization + Scheduling
         self._validate_and_add_requests(
             prompts=parsed_prompts,
             params=sampling_params,
@@ -1533,7 +1534,7 @@ class LLM:
         total_in_toks = 0
         total_out_toks = 0
         while self.llm_engine.has_unfinished_requests():
-            step_outputs = self.llm_engine.step()
+            step_outputs = self.llm_engine.step() # Each step predits a next token
             for output in step_outputs:
                 if output.finished:
                     outputs.append(output)

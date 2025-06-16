@@ -247,6 +247,7 @@ class Processor:
             prompt_adapter_request=prompt_adapter_request,
             return_mm_hashes=self.use_hash,
         )
+        print(f"\nInput tokenization: \"{prompt}\" -> {processed_inputs['prompt_token_ids']}")
         from vllm.platforms import current_platform
         current_platform.validate_request(
             prompt=prompt,

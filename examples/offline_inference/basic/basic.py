@@ -5,8 +5,8 @@ from vllm import LLM, SamplingParams
 
 # Sample prompts.
 prompts = [
-    "Hello, my name is",
-    "The president of the United States is",
+    # "Hello, my name is",
+    # "The president of the United States is",
     "The capital of France is",
     "The future of AI is",
 ]
@@ -16,7 +16,7 @@ sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
 
 def main():
     # Create an LLM.
-    llm = LLM(model="facebook/opt-125m")
+    llm = LLM(model="mistralai/Mistral-7B-Instruct-v0.1", tokenizer_mode="auto", enforce_eager=True)
     # Generate texts from the prompts.
     # The output is a list of RequestOutput objects
     # that contain the prompt, generated text, and other information.

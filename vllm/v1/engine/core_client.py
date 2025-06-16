@@ -632,6 +632,8 @@ class SyncMPClient(MPClient):
         msg = (self.core_engine.identity, request_type.value,
                *self.encoder.encode(request))
 
+        if hasattr(request, "request_id"):
+            print(f"Sending request[{request.request_id}] with prompt tokens {request.prompt_token_ids} to the scheduler")
         if len(msg) <= 3:
             # No auxiliary buffers => no tensor backing buffers in request.
             self.input_socket.send_multipart(msg, copy=False)

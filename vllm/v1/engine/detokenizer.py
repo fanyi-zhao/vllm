@@ -111,7 +111,10 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         offset_before = len(self.output_text)
         for new_token_id in new_token_ids:
             self.token_ids.append(new_token_id)
-            self.output_text += self.decode_next(new_token_id)
+            decoded = self.decode_next(new_token_id)
+            # print(f"llm_enging.step - Decoded token {new_token_id} to '{decoded}'")
+            self.decoded = decoded
+            self.output_text += decoded
 
         if stop_terminated:
             if skipped_stop_token_id is not None:
