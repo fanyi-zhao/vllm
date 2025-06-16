@@ -291,7 +291,7 @@ class Worker(WorkerBase):
                     all_gather_group=get_tp_group()))
         print(
             f"Worker {self.rank} executing model with "
-            f"{len(scheduler_output.requests)} requests.")
+            f"{scheduler_output}.")
         output = self.model_runner.execute_model(scheduler_output,
                                                  intermediate_tensors)
         parallel_config = self.vllm_config.parallel_config
