@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import threading
 import time
 from collections import defaultdict, deque
 from collections.abc import Iterable
@@ -156,7 +157,7 @@ class Scheduler(SchedulerInterface):
         )
 
     def schedule(self) -> SchedulerOutput:
-        print("Scheduling requests...")
+        print(f"[Thread-{threading.get_ident()}] Scheduling requests...")
         # NOTE(woosuk) on the scheduling algorithm:
         # There's no "decoding phase" nor "prefill phase" in the scheduler.
         # Each request just has the num_computed_tokens and
@@ -452,7 +453,7 @@ class Scheduler(SchedulerInterface):
                     structured_output_request_ids[
                         request.request_id] = req_index
                 req_index += 1
-                print(f"Scheduling request {request.request_id}")
+                print(f"[Thread-{threading.get_ident()}] Scheduling request {request.request_id}")
                 self.running.append(request)
                 if self.log_stats:
                     request.record_event(EngineCoreEventType.SCHEDULED,
@@ -871,7 +872,7 @@ class Scheduler(SchedulerInterface):
         return len(self.running), len(self.waiting)
 
     def add_request(self, request: Request) -> None:
-        print(f"Adding request {request.request_id} to scheduler waiting queue")
+        print(f"[Thread-{threading.get_ident()}] Adding request {request.request_id} to scheduler waiting queue")
         self.waiting.append(request)
         self.requests[request.request_id] = request
         if self.log_stats:

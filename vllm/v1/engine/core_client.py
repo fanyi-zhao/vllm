@@ -4,6 +4,7 @@ import asyncio
 import contextlib
 import queue
 import sys
+import threading
 import uuid
 import weakref
 from abc import ABC, abstractmethod
@@ -633,7 +634,7 @@ class SyncMPClient(MPClient):
                *self.encoder.encode(request))
 
         if hasattr(request, "request_id"):
-            print(f"Sending request[{request.request_id}] with prompt tokens {request.prompt_token_ids} to the scheduler")
+            print(f"[Thread-{threading.get_ident()}] Sending request[{request.request_id}] with prompt tokens {request.prompt_token_ids} to the scheduler")
         if len(msg) <= 3:
             # No auxiliary buffers => no tensor backing buffers in request.
             self.input_socket.send_multipart(msg, copy=False)

@@ -4,6 +4,7 @@
 import asyncio
 from collections.abc import Iterable
 from dataclasses import dataclass
+import threading
 from typing import Any, Optional, Union
 
 from vllm.outputs import CompletionOutput, RequestOutput
@@ -350,7 +351,7 @@ class OutputProcessor:
             # 2) Detokenize the token ids into text and perform stop checks.
             stop_string = req_state.detokenizer.update(
                 new_token_ids, finish_reason == FinishReason.STOP)
-            print(f"Request {req_id} detokenized {new_token_ids} tokens into text: {req_state.detokenizer.decoded}")
+            print(f"[Thread-{threading.get_ident()}] Request {req_id} detokenized {new_token_ids} tokens into text: {req_state.detokenizer.decoded}")
             if stop_string:
                 finish_reason = FinishReason.STOP
                 stop_reason = stop_string

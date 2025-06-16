@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
 
+import threading
 import time
 from collections.abc import Mapping, Sequence
 from typing import Any, Literal, Optional, Union
@@ -247,7 +248,7 @@ class Processor:
             prompt_adapter_request=prompt_adapter_request,
             return_mm_hashes=self.use_hash,
         )
-        print(f"\nInput tokenization: \"{prompt}\" -> {processed_inputs['prompt_token_ids']}")
+        print(f"\n[Thread-{threading.get_ident()}] Input tokenization: \"{prompt}\" -> {processed_inputs['prompt_token_ids']}")
         from vllm.platforms import current_platform
         current_platform.validate_request(
             prompt=prompt,

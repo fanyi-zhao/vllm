@@ -24,6 +24,7 @@
 # limitations under the License.
 """Inference-only LLaMA model compatible with HuggingFace weights."""
 from collections.abc import Iterable
+import threading
 from typing import Any, Optional, Union
 
 import torch
@@ -373,6 +374,9 @@ class LlamaModel(nn.Module):
         inputs_embeds: Optional[torch.Tensor] = None,
     ) -> Union[torch.Tensor, IntermediateTensors, tuple[torch.Tensor,
                                                         list[torch.Tensor]]]:
+        print(
+            f"[Thread-{threading.get_ident()}] Running LlamaModel with {get_tensor_model_parallel_world_size()} TP ranks"
+        )
         if get_pp_group().is_first_rank:
             if inputs_embeds is not None:
                 hidden_states = inputs_embeds

@@ -3,6 +3,7 @@
 """A GPU worker class."""
 import gc
 import os
+import threading
 from typing import TYPE_CHECKING, Optional
 
 import torch
@@ -290,7 +291,7 @@ class Worker(WorkerBase):
                 get_pp_group().recv_tensor_dict(
                     all_gather_group=get_tp_group()))
         print(
-            f"Worker {self.rank} executing model with "
+            f"[Thread-{threading.get_ident()}] Worker {self.rank} executing model with "
             f"{scheduler_output}.")
         output = self.model_runner.execute_model(scheduler_output,
                                                  intermediate_tensors)

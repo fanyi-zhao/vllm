@@ -194,7 +194,7 @@ class EngineCore:
                 not self.scheduler.get_kv_connector()):
             logger.warning("Got kv_transfer_params, but no KVConnector found. "
                            "Disabling KVTransfer for this request.")
-        print(f"\nAdding request[{request.request_id}] with prompt tokens {req.prompt_token_ids} to the scheduler.")
+        print(f"\n[Thread-{threading.get_ident()}] Adding request[{request.request_id}] with prompt tokens {req.prompt_token_ids} to the scheduler.")
         self.scheduler.add_request(req)
 
     def abort_requests(self, request_ids: list[str]):
@@ -228,7 +228,7 @@ class EngineCore:
         if not self.scheduler.has_requests():
             return {}, False
         scheduler_output = self.scheduler.schedule()
-        print(f"\nScheduler scheduled {scheduler_output.total_num_scheduled_tokens} tokens in this step. Executing model...")
+        print(f"\n[Thread-{threading.get_ident()}] Scheduler scheduled {scheduler_output.total_num_scheduled_tokens} tokens in this step. Executing model...")
         model_output = self.execute_model(scheduler_output)
         engine_core_outputs = self.scheduler.update_from_output(
             scheduler_output, model_output)  # type: ignore
@@ -676,7 +676,7 @@ class EngineCoreProc(EngineCore):
                     
                     # Push to input queue for core busy loop.
                     if hasattr(request, 'request_id'):
-                        print(f"\nReceived request[{request.request_id}] with prompt tokens {request.prompt_token_ids}")
+                        print(f"\n[Thread-{threading.get_ident()}] Received request[{request.request_id}] with prompt tokens {request.prompt_token_ids}")
                     self.input_queue.put_nowait((request_type, request))
 
     def process_output_sockets(self, output_paths: list[str],
